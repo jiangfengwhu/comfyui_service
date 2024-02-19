@@ -6,13 +6,7 @@ import (
 	"os"
 )
 
-type TemplateType string
 type LoraConfig map[string]float32
-
-const (
-	SDFacePortrait TemplateType = "SDFacePortrait"
-	Normal         TemplateType = "基础版"
-)
 
 type Sampler struct {
 	Steps       int     `json:"steps"`
@@ -30,18 +24,18 @@ type OutputImage struct {
 	BatchSize int `json:"batch_size"`
 }
 type PromptTemplate struct {
-	OutputImage OutputImage  `json:"output_image"`
-	Sampler     Sampler      `json:"sampler"`
-	Type        TemplateType `json:"type"`
-	CheckPoint  string       `json:"check_point"`
-	Lora        LoraConfig   `json:"lora"`
-	PromptGroup PromptGroup  `json:"prompt_group"`
-	Name        string       `json:"name,omitempty"`
+	OutputImage OutputImage `json:"output_image"`
+	Sampler     Sampler     `json:"sampler"`
+	Type        string      `json:"type"`
+	CheckPoint  string      `json:"check_point"`
+	Lora        LoraConfig  `json:"lora"`
+	PromptGroup PromptGroup `json:"prompt_group"`
+	Name        string      `json:"name,omitempty"`
 }
 
-var TemplatePool = map[TemplateType]PromptTemplate{}
+var TemplatePool = map[string]PromptTemplate{}
 
-func ReadPromptTemplate(tmpType TemplateType) PromptTemplate {
+func ReadPromptTemplate(tmpType string) PromptTemplate {
 	if val, ok := TemplatePool[tmpType]; ok {
 		return val
 	}

@@ -76,9 +76,6 @@ func (workflow *Workflow) Process(handler func(string, BaseNode)) {
 			workflow.StartLoraId = key
 			workflow.ModelId = modelId
 		}
-		if _, ok := val.Inputs["seed"]; ok {
-			println(key, val.Inputs["seed"].(uint64))
-		}
 		handler(key, val)
 	}
 }
@@ -116,8 +113,13 @@ func (workflow *Workflow) NewLoraNode(loraName string, strength float32) BaseNod
 
 // ======end workflow manipulation======
 
-func ReadWorkflowFile() Workflow {
-	file, err := os.ReadFile("./workflows/base.json")
+var WorkflowPool = map[string]Workflow{}
+
+func ReadWorkflowFile(workflowType string) Workflow {
+	if val, ok := WorkflowPool[workflowType]; ok {
+		return val
+	}
+	file, err := os.ReadFile(fmt.Sprintf("./workflows/%s.json", workflowType))
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)
 		return Workflow{}
@@ -130,7 +132,8 @@ func ReadWorkflowFile() Workflow {
 		fmt.Println("Error parsing JSON:", err)
 		return Workflow{}
 	}
-	return Workflow{Prompt: data}
+	WorkflowPool[workflowType] = Workflow{Prompt: data}
+	return WorkflowPool[workflowType]
 }
 
 func WriteWorkflowFile(workflow Workflow) {
