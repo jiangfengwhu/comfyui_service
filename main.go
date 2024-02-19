@@ -2,34 +2,31 @@ package main
 
 import (
 	"comfyui_service/utils"
-	"net/http"
-	"strings"
-
 	"github.com/gin-gonic/gin"
-	"github.com/tidwall/gjson"
-	//"github.com/tidwall/sjson"
+	"github.com/goccy/go-json"
+	"net/http"
 )
 
 func main() {
 	r := gin.Default()
-	var data = utils.ReadWorkflowFile()
-	//fmt.Println(gjson.Get(data, `..#.class_type`))
-	gjson.AddModifier("case", func(json, arg string) string {
-		if arg == "upper" {
-			return strings.ToUpper(json)
-		}
-		if arg == "lower" {
-			return strings.ToLower(json)
-		}
-		return json
+	var prompt = utils.ReadWorkflowFile()
+	var promptTemplate = utils.ReadPromptTemplate(utils.Normal)
+	prompt.Process(func(key string, val utils.BaseNode) {
+		val.UpdatePrompt(promptTemplate.PromptGroup)
+		val.UpdateSampler(promptTemplate.Sampler)
+		val.UpdateModel(promptTemplate.CheckPoint)
+		val.UpdateOutputImage(promptTemplate.OutputImage)
 	})
-	println(gjson.Get(data, `3|@case:upper`).String())
-	CreateKSampler := utils.CreateKSampler()
-	CreateKSampler.UpdateSeed()
+	prompt.AddLora(promptTemplate.Lora)
+	utils.WriteWorkflowFile(prompt)
+	if val, err := json.Marshal(prompt.Prompt); err == nil {
+		println(string(val))
+	}
 	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
+		c.JSON(http.StatusOK, prompt.Prompt)
+		//c.JSON(http.StatusOK, gin.H{
+		//	"data": prompt.Prompt,
+		//})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

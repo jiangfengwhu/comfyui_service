@@ -1,5 +1,5 @@
 {
-  "KSampler": {
+  "3": {
     "inputs": {
       "seed": 156680208700286,
       "steps": 20,
@@ -8,7 +8,7 @@
       "scheduler": "normal",
       "denoise": 1,
       "model": [
-        "4",
+        "12",
         0
       ],
       "positive": [
@@ -29,16 +29,16 @@
       "title": "KSampler"
     }
   },
-  "checkpointLoader": {
+  "4": {
     "inputs": {
-      "ckpt_name": "OpenDalleV1.1.safetensors"
+      "ckpt_name": "SDXL-TURBO/sd_xl_turbo_1.0.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
       "title": "Load Checkpoint"
     }
   },
-  "EmptyLatentImage": {
+  "5": {
     "inputs": {
       "width": 512,
       "height": 512,
@@ -49,33 +49,33 @@
       "title": "Empty Latent Image"
     }
   },
-  "PositivePrompt": {
+  "6": {
     "inputs": {
       "text": "beautiful scenery nature glass bottle landscape, , purple galaxy bottle,",
       "clip": [
-        "4",
-        1
+        "10",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
+      "title": "正向提示词"
     }
   },
-  "NegativePrompt": {
+  "7": {
     "inputs": {
       "text": "text, watermark",
       "clip": [
-        "4",
-        1
+        "10",
+        0
       ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
+      "title": "负向提示词"
     }
   },
-  "VAEDecode": {
+  "8": {
     "inputs": {
       "samples": [
         "3",
@@ -91,7 +91,7 @@
       "title": "VAE Decode"
     }
   },
-  "SaveImage": {
+  "9": {
     "inputs": {
       "filename_prefix": "ComfyUI",
       "images": [
@@ -102,6 +102,37 @@
     "class_type": "SaveImage",
     "_meta": {
       "title": "Save Image"
+    }
+  },
+  "10": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": [
+        "12",
+        1
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "CLIP Set Last Layer"
+    }
+  },
+  "12": {
+    "inputs": {
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "LoraLoader",
+    "_meta": {
+      "title": "LoadStyleLoRA"
     }
   }
 }

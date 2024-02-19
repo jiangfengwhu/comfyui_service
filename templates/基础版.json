@@ -1,0 +1,25 @@
+{
+  "sampler": {
+    "steps": 35,
+    "cfg": 7,
+    "sampler_name": "dpmpp_2m",
+    "scheduler": "karras"
+  },
+  "type": "SD",
+  "lora": {
+    "xx": 0.1,
+    "yy": 0.2,
+    "zz": 0.3
+  },
+  "check_point": "sd1.5\\dreamshaper_8.safetensors",
+  "output_image": {
+    "width": 512,
+    "height": 778,
+    "batch_size": 4
+  },
+  "prompt_group": {
+    "negative": "(worst quality:1.6, low quality:1.6), (zombie, sketch, interlocked fingers),Cross-eyed\nEasyNegative, (((2 heads))), (((duplicate))), ((malformed hand)), ((deformed arm)), ((twisted fingers)),((extra fingers)),\nblurry, abstract, deformed, figure, framed, 3d,bad art, poorly drawn, \nextra limbs, close up, weird colors, watermark, blur haze, long neck, \nelongated body, cropped image,out of frame, draft, (((deformed hands))), \n double image, ((malformed hands)), multiple heads, extra limb, ugly, \n((poorly drawn hands)), missing limb, cut-off, grain, bad anatomy, poorly drawn face, mutation, mutated, floating limbs, disconnected limbs, out of focus, long body, disgusting, cloned face, missing legs",
+    "positive": "(masterpiece),(best quality:1.4),flowers and petals,Long bob,(grey dress),dagger,exquisite detail,awesome full color,magic circle,[water ripples],[swirl]"
+  },
+  "name": "test"
+}
