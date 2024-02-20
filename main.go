@@ -8,6 +8,7 @@ import (
 func main() {
 	r := gin.Default()
 	r.GET("/prompt", routes.GetPrompt)
-	r.GET("/ws", routes.LinkRemoteGPU)
+	r.GET("/ws_secret_api", routes.LinkRemoteGPU)
+	r.POST("/queue", routes.QueuePrompt)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
