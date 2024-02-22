@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"comfyui_service/routes"
+	"comfyui_service/gpu_host"
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/hex"
@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -82,54 +83,71 @@ func queuePrompt(data []byte) {
 }
 func main() {
 	config = initConfig()
+	mutex := sync.Mutex{}
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	log.Printf("connecting to %s", config.Addr)
+	var c *websocket.Conn
+	var err error
+	var done chan struct{}
 
-	c, _, err := websocket.DefaultDialer.Dial(config.Addr, nil)
-	if err != nil {
-		log.Fatal("dial:", err)
-	}
-	defer c.Close()
-
-	done := make(chan struct{})
-
-	go func() {
-		defer close(done)
-		for {
-			_, message, err := c.ReadMessage()
-			if err != nil {
-				log.Println("read:", err)
-			}
-			var receivedData routes.ToGPU
-			err = json.Unmarshal(message, &receivedData)
-			if err != nil {
-				log.Println("unmarshal:", err)
-			}
-			if receivedData.Type == "prompt" {
-				for _, imgBase64 := range receivedData.Images {
-					saveImage(imgBase64)
-				}
-				postData := map[string]interface{}{
-					"prompt": receivedData.Prompt,
-				}
-				jsonData, err := json.Marshal(postData)
-				if err != nil {
-					log.Println("marshal:", err)
-				}
-				queuePrompt(jsonData)
-			} else if receivedData.Type == "image" {
-
-			}
-			//log.Printf("recv: %s", receivedData)
+	connect := func() {
+		log.Printf("connecting to %s", config.Addr)
+		done = make(chan struct{})
+		c, _, err = websocket.DefaultDialer.Dial(config.Addr, nil)
+		if err != nil {
+			log.Println("dial:", err)
+			return
 		}
-	}()
+
+		go func() {
+			defer close(done)
+			for {
+				var receivedData gpu_host.WSMessage
+				err := c.ReadJSON(&receivedData)
+				if err != nil {
+					log.Println("error msg:", err)
+					return
+				}
+				if receivedData.Type == "prompt" {
+					for _, imgBase64 := range receivedData.Images {
+						saveImage(imgBase64)
+					}
+					postData := map[string]interface{}{
+						"prompt": receivedData.Prompt,
+					}
+					jsonData, err := json.Marshal(postData)
+					if err != nil {
+						log.Println("marshal:", err)
+						return
+					}
+					queuePrompt(jsonData)
+				} else if receivedData.Type == "image" {
+
+				} else if receivedData.Type == "alive" {
+					mutex.Lock()
+					err := c.WriteJSON(gpu_host.WSMessage{Type: "alive", Id: receivedData.Id})
+					if err != nil {
+						log.Println("write alive err:", err)
+						return
+					}
+					mutex.Unlock()
+				}
+			}
+		}()
+	}
+
+	connect()
+	heartbeat := time.NewTicker(5 * time.Second) // send heartbeat every 5 seconds
+	defer heartbeat.Stop()
 
 	for {
 		select {
 		case <-done:
-			return
+			log.Println("connection lost, trying to reconnect")
+			c.Close()
+			time.Sleep(5 * time.Second)
+			connect()
 		case <-interrupt:
 			log.Println("interrupt")
 
@@ -145,6 +163,19 @@ func main() {
 			case <-time.After(time.Second):
 			}
 			return
+		case <-heartbeat.C:
+			// Send heartbeat
+			if c == nil {
+				connect()
+				continue
+			}
+			err := c.WriteMessage(websocket.PingMessage, nil)
+			if err != nil {
+				log.Println("write heartbeat:", err)
+				c.Close()
+				time.Sleep(5 * time.Second)
+				connect()
+			}
 		}
 	}
 }

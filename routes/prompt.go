@@ -1,10 +1,9 @@
 package routes
 
 import (
+	"comfyui_service/gpu_host"
 	"comfyui_service/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/goccy/go-json"
-	"github.com/gorilla/websocket"
 	"net/http"
 )
 
@@ -15,19 +14,8 @@ type QueuePromptReq struct {
 	Images     map[string]string `json:"images,omitempty"`
 }
 
-type ToGPU struct {
-	Type   string                    `json:"type"`
-	Prompt map[string]utils.BaseNode `json:"prompt"`
-	Images map[string]string         `json:"images,omitempty"`
-}
 type ImageUploadReq struct {
 	ImgBase64 string `json:"img_base64"`
-}
-type FromGPU struct {
-	Type    string `json:"type"`
-	Content string `json:"content,omitempty"`
-	Image   []byte `json:"image,omitempty"`
-	Id      int16  `json:"id,omitempty"`
 }
 
 func GetPrompt(c *gin.Context) {
@@ -61,17 +49,12 @@ func QueuePrompt(c *gin.Context) {
 		val.UpdateOutputImage(promptTemplate.OutputImage)
 	})
 	prompt.AddLora(promptTemplate.Lora)
-	gpuMessage := ToGPU{
+	gpuMessage := gpu_host.WSMessage{
 		Type:   "prompt",
 		Prompt: prompt.Prompt,
 		Images: req.Images,
 	}
-	gpuMsgText, err := json.Marshal(gpuMessage)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"msg": "JSON编码错误"})
-		return
-	}
-	err = gpuConnection.WriteMessage(websocket.TextMessage, gpuMsgText)
+	err := gpu_host.GpuConnection.SendMessage(gpuMessage)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": "GPU连接错误"})
 		return
