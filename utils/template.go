@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/goccy/go-json"
 	"os"
+	"path/filepath"
 )
 
 type LoraConfig map[string]float32
@@ -39,7 +40,7 @@ func ReadPromptTemplate(tmpType string) PromptTemplate {
 	if val, ok := TemplatePool[tmpType]; ok {
 		return val
 	}
-	file, err := os.ReadFile(fmt.Sprintf("./templates/%s.json", tmpType))
+	file, err := os.ReadFile(filepath.Join(Config.TemplateDir, tmpType+".json"))
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)
 		return PromptTemplate{}

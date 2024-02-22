@@ -1,0 +1,6 @@
+{
+  "comfy_host": "http://127.0.0.1:8188",
+  "address_update_url": "http://localhost:8081/addr",
+  "workflow_dir": "./workflows",
+  "template_dir": "./templates"
+}

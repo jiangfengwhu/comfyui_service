@@ -5,11 +5,14 @@ import (
 	"github.com/goccy/go-json"
 	"math/rand"
 	"os"
+	"path/filepath"
 )
 
 type Meta struct {
 	Title string `json:"title"`
 }
+
+type Prompt = map[string]BaseNode
 
 type BaseNode struct {
 	ClassType string                 `json:"class_type"`
@@ -17,9 +20,9 @@ type BaseNode struct {
 	Meta      Meta                   `json:"_meta"`
 }
 type Workflow struct {
-	Prompt      map[string]BaseNode `json:"prompt"`
-	StartLoraId string              `json:"start_lora_id,omitempty"`
-	ModelId     string              `json:"model_id,omitempty"`
+	Prompt      Prompt `json:"prompt"`
+	StartLoraId string `json:"start_lora_id,omitempty"`
+	ModelId     string `json:"model_id,omitempty"`
 }
 
 //======start node manipulation======
@@ -100,7 +103,7 @@ func (workflow *Workflow) NewLoraNode(loraName string, strength float32) BaseNod
 		Inputs: map[string]interface{}{
 			"strength_model": strength,
 			"strength_clip":  1,
-			"lora_name":      loraName,
+			"lora_name":      loraName + ".safetensors",
 			"model":          []interface{}{workflow.ModelId, 0},
 			"clip":           []interface{}{workflow.ModelId, 1},
 		},
@@ -119,7 +122,7 @@ func ReadWorkflowFile(workflowType string) Workflow {
 	if val, ok := WorkflowPool[workflowType]; ok {
 		return val
 	}
-	file, err := os.ReadFile(fmt.Sprintf("./workflows/%s.json", workflowType))
+	file, err := os.ReadFile(filepath.Join(Config.WorkflowDir, workflowType+".json"))
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)
 		return Workflow{}
