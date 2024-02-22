@@ -1,6 +1,0 @@
-{
-    "addr": "ws://localhost:8080/ws_secret_api",
-    "input_image_dir": "./",
-    "output_image_dir": "./",
-    "comfy_ui_addr": "http://127.0.0.1:8188"
-}
