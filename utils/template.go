@@ -5,6 +5,7 @@ import (
 	"github.com/goccy/go-json"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type LoraConfig map[string]float32
@@ -32,18 +33,16 @@ type PromptTemplate struct {
 	Lora        LoraConfig  `json:"lora"`
 	PromptGroup PromptGroup `json:"prompt_group"`
 	Name        string      `json:"name,omitempty"`
+	Desc        string      `json:"desc,omitempty"`
 }
 
 var TemplatePool = map[string]PromptTemplate{}
 
-func ReadPromptTemplate(tmpType string) PromptTemplate {
-	if val, ok := TemplatePool[tmpType]; ok {
-		return val
-	}
+func addToTemplatePool(tmpType string) error {
 	file, err := os.ReadFile(filepath.Join(Config.TemplateDir, tmpType+".json"))
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)
-		return PromptTemplate{}
+		return err
 	}
 
 	// 解析JSON数据到 map[string]interface{}
@@ -51,8 +50,47 @@ func ReadPromptTemplate(tmpType string) PromptTemplate {
 	err = json.Unmarshal(file, &data)
 	if err != nil {
 		fmt.Println("Error parsing JSON:", err)
-		return PromptTemplate{}
+		return err
 	}
 	TemplatePool[tmpType] = data
-	return data
+	return nil
+}
+func ReadPromptTemplate(tmpType string) PromptTemplate {
+	if val, ok := TemplatePool[tmpType]; ok {
+		return val
+	}
+	err := addToTemplatePool(tmpType)
+	if err != nil {
+		return PromptTemplate{}
+	}
+	return TemplatePool[tmpType]
+}
+
+func UpdateTemplatePool() {
+	files, err := os.ReadDir(Config.TemplateDir)
+	if err != nil {
+		fmt.Println("Error reading directory:", err)
+		return
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		fileName := file.Name()
+		if filepath.Ext(fileName) != ".json" {
+			continue
+		}
+		err := addToTemplatePool(strings.TrimSuffix(fileName, ".json"))
+		if err != nil {
+			fmt.Println("Error reading file:", err)
+		}
+	}
+}
+
+func GetAllTemplateId() []interface{} {
+	keys := make([]interface{}, 0, len(TemplatePool))
+	for key, val := range TemplatePool {
+		keys = append(keys, map[string]interface{}{"id": key, "desc": val.Desc})
+	}
+	return keys
 }

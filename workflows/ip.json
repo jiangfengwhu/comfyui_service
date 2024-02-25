@@ -1,23 +1,23 @@
 {
   "3": {
     "inputs": {
-      "seed": 565011220517970,
-      "steps": 30,
-      "cfg": 7,
-      "sampler_name": "dpmpp_2m_sde",
+      "seed": 505824969797218,
+      "steps": 7,
+      "cfg": 2.6,
+      "sampler_name": "dpmpp_sde",
       "scheduler": "karras",
       "denoise": 1,
       "model": [
-        "10",
+        "57",
         0
       ],
       "positive": [
-        "6",
+        "23",
         0
       ],
       "negative": [
-        "7",
-        0
+        "23",
+        1
       ],
       "latent_image": [
         "5",
@@ -31,7 +31,7 @@
   },
   "4": {
     "inputs": {
-      "ckpt_name": "sd1.5\\revAnimated_v122EOL.safetensors"
+      "ckpt_name": "sdxl\\dreamshaperXL_v2TurboDpmppSDE.safetensors"
     },
     "class_type": "CheckpointLoaderSimple",
     "_meta": {
@@ -40,39 +40,13 @@
   },
   "5": {
     "inputs": {
-      "width": 512,
-      "height": 768,
+      "width": 1024,
+      "height": 1024,
       "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
     "_meta": {
       "title": "Empty Latent Image"
-    }
-  },
-  "6": {
-    "inputs": {
-      "text": "(masterpiece),(best quality),(ultra-detailed), (full body:1.2), 1girl,chibi,cute, smile, white Bob haircut, red eyes, earring, white shirt,black skirt, lace legwear, (sitting on red sofa), seductive posture, smile, A sleek black coffee table sits in front of the sofa and a few decorative items are placed on the shelves, (beautiful detailed face), (beautiful detailed eyes), <lora:blindbox_v1_mix:1>,\n",
-      "clip": [
-        "39",
-        0
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
-    }
-  },
-  "7": {
-    "inputs": {
-      "text": "(low quality:1.3), (worst quality:1.3)\n",
-      "clip": [
-        "39",
-        0
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Prompt)"
     }
   },
   "8": {
@@ -91,85 +65,18 @@
       "title": "VAE Decode"
     }
   },
-  "9": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "8",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "OriginImage"
-    }
-  },
-  "10": {
-    "inputs": {
-      "weight": 1,
-      "noise": 0,
-      "weight_type": "original",
-      "start_at": 0,
-      "end_at": 1,
-      "faceid_v2": false,
-      "weight_v2": 1,
-      "unfold_batch": false,
-      "ipadapter": [
-        "11",
-        0
-      ],
-      "clip_vision": [
-        "12",
-        0
-      ],
-      "insightface": [
-        "13",
-        0
-      ],
-      "image": [
-        "14",
-        0
-      ],
-      "model": [
-        "61",
-        0
-      ]
-    },
-    "class_type": "IPAdapterApplyFaceID",
-    "_meta": {
-      "title": "Apply IPAdapter FaceID"
-    }
-  },
   "11": {
     "inputs": {
-      "ipadapter_file": "ipadapter\\ip-adapter-faceid-portrait-v11_sd15.bin"
+      "instantid_file": "ip-adapter.bin"
     },
-    "class_type": "IPAdapterModelLoader",
+    "class_type": "InstantIDModelLoader",
     "_meta": {
-      "title": "Load IPAdapter Model"
-    }
-  },
-  "12": {
-    "inputs": {
-      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
-    },
-    "class_type": "CLIPVisionLoader",
-    "_meta": {
-      "title": "Load CLIP Vision"
+      "title": "Load InstantID Model"
     }
   },
   "13": {
     "inputs": {
-      "provider": "CPU"
-    },
-    "class_type": "InsightFaceLoader",
-    "_meta": {
-      "title": "Load InsightFace"
-    }
-  },
-  "14": {
-    "inputs": {
-      "image": "b03533fa828ba61ea8d32bab8379800a304e241ff3ab (1).jpg",
+      "image": "b03533fa828ba61ea8d32bab8379800a304e241ff3ab.jpg",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -177,84 +84,129 @@
       "title": "Load Image"
     }
   },
-  "31": {
+  "16": {
     "inputs": {
-      "ipadapter_file": "ipadapter\\ip-adapter-faceid-plusv2_sd15.bin"
+      "control_net_name": "instantid_controlnet.safetensors"
     },
-    "class_type": "IPAdapterModelLoader",
+    "class_type": "ControlNetLoader",
     "_meta": {
-      "title": "Load IPAdapter Model"
+      "title": "Load ControlNet Model"
     }
   },
-  "32": {
+  "23": {
     "inputs": {
-      "lora_name": "ip-adapter-faceid-plusv2_sd15_lora.safetensors",
-      "strength_model": 0.8,
-      "model": [
-        "61",
-        0
-      ]
-    },
-    "class_type": "LoraLoaderModelOnly",
-    "_meta": {
-      "title": "LoraLoaderModelOnly"
-    }
-  },
-  "33": {
-    "inputs": {
-      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
-    },
-    "class_type": "CLIPVisionLoader",
-    "_meta": {
-      "title": "Load CLIP Vision"
-    }
-  },
-  "34": {
-    "inputs": {
-      "provider": "CPU"
-    },
-    "class_type": "InsightFaceLoader",
-    "_meta": {
-      "title": "Load InsightFace"
-    }
-  },
-  "35": {
-    "inputs": {
-      "weight": 1,
-      "noise": 0,
-      "weight_type": "original",
-      "start_at": 0,
-      "end_at": 1,
-      "faceid_v2": true,
-      "weight_v2": 1,
-      "unfold_batch": false,
-      "ipadapter": [
-        "31",
-        0
+      "strength": 0.65,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "57",
+        1
       ],
-      "clip_vision": [
-        "33",
-        0
+      "negative": [
+        "57",
+        2
       ],
-      "insightface": [
-        "34",
+      "control_net": [
+        "16",
         0
       ],
       "image": [
-        "14",
-        0
-      ],
-      "model": [
-        "32",
+        "58",
         0
       ]
     },
-    "class_type": "IPAdapterApplyFaceID",
+    "class_type": "ControlNetApplyAdvanced",
     "_meta": {
-      "title": "Apply IPAdapter FaceID"
+      "title": "Apply ControlNet (Advanced)"
+    }
+  },
+  "38": {
+    "inputs": {
+      "provider": "CPU"
+    },
+    "class_type": "InstantIDFaceAnalysis",
+    "_meta": {
+      "title": "InstantID Face Analysis"
     }
   },
   "39": {
+    "inputs": {
+      "text": "watercolors portrait of a woman (happy laughing:1.15), masterpiece, artistry",
+      "clip": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "正向提示词"
+    }
+  },
+  "40": {
+    "inputs": {
+      "text": "low quality, blurry, malformed, distorted",
+      "clip": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "负向提示词"
+    }
+  },
+  "57": {
+    "inputs": {
+      "weight": 0.8,
+      "start_at": 0,
+      "end_at": 1,
+      "instantid": [
+        "11",
+        0
+      ],
+      "insightface": [
+        "38",
+        0
+      ],
+      "image_features": [
+        "13",
+        0
+      ],
+      "model": [
+        "61",
+        0
+      ],
+      "positive": [
+        "39",
+        0
+      ],
+      "negative": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "ApplyInstantID",
+    "_meta": {
+      "title": "Apply InstantID"
+    }
+  },
+  "58": {
+    "inputs": {
+      "faceanalysis": [
+        "38",
+        0
+      ],
+      "image": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "FaceKeypointsPreprocessor",
+    "_meta": {
+      "title": "Face Keypoints Preprocessor"
+    }
+  },
+  "60": {
     "inputs": {
       "stop_at_clip_layer": -2,
       "clip": [
@@ -267,353 +219,36 @@
       "title": "CLIP Set Last Layer"
     }
   },
-  "40": {
-    "inputs": {
-      "guide_size": 256,
-      "guide_size_for": true,
-      "max_size": 768,
-      "seed": 804462552494540,
-      "steps": 20,
-      "cfg": 8,
-      "sampler_name": "dpmpp_2m_sde",
-      "scheduler": "karras",
-      "denoise": 0.5,
-      "feather": 5,
-      "noise_mask": true,
-      "force_inpaint": true,
-      "bbox_threshold": 0.5,
-      "bbox_dilation": 10,
-      "bbox_crop_factor": 3,
-      "sam_detection_hint": "center-1",
-      "sam_dilation": 0,
-      "sam_threshold": 0.93,
-      "sam_bbox_expansion": 0,
-      "sam_mask_hint_threshold": 0.7000000000000001,
-      "sam_mask_hint_use_negative": "False",
-      "drop_size": 10,
-      "wildcard": "",
-      "cycle": 1,
-      "inpaint_model": false,
-      "noise_mask_feather": 0,
-      "image": [
-        "8",
-        0
-      ],
-      "model": [
-        "10",
-        0
-      ],
-      "clip": [
-        "39",
-        0
-      ],
-      "vae": [
-        "4",
-        2
-      ],
-      "positive": [
-        "6",
-        0
-      ],
-      "negative": [
-        "7",
-        0
-      ],
-      "bbox_detector": [
-        "41",
-        0
-      ],
-      "sam_model_opt": [
-        "42",
-        0
-      ]
-    },
-    "class_type": "FaceDetailer",
-    "_meta": {
-      "title": "FaceDetailer"
-    }
-  },
-  "41": {
-    "inputs": {
-      "model_name": "bbox/face_yolov8m.pt"
-    },
-    "class_type": "UltralyticsDetectorProvider",
-    "_meta": {
-      "title": "UltralyticsDetectorProvider"
-    }
-  },
-  "42": {
-    "inputs": {
-      "model_name": "sam_vit_b_01ec64.pth",
-      "device_mode": "AUTO"
-    },
-    "class_type": "SAMLoader",
-    "_meta": {
-      "title": "SAMLoader (Impact)"
-    }
-  },
-  "48": {
-    "inputs": {
-      "lora_name": "blindbox_v1_mix.safetensors",
-      "strength_model": 0,
-      "strength_clip": 0,
-      "model": [
-        "4",
-        0
-      ],
-      "clip": [
-        "4",
-        1
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
-  "49": {
-    "inputs": {
-      "scale_method": "nearest-exact",
-      "seed": 154901308034178,
-      "steps": 20,
-      "cfg": 8,
-      "sampler_name": "dpmpp_2m_sde",
-      "scheduler": "karras",
-      "denoise": 0.3,
-      "tile_width": 512,
-      "tile_height": 512,
-      "tiling_strategy": "random",
-      "model": [
-        "10",
-        0
-      ],
-      "vae": [
-        "4",
-        2
-      ],
-      "positive": [
-        "6",
-        0
-      ],
-      "negative": [
-        "7",
-        0
-      ],
-      "upscale_model_opt": [
-        "50",
-        0
-      ]
-    },
-    "class_type": "PixelTiledKSampleUpscalerProvider",
-    "_meta": {
-      "title": "PixelTiledKSampleUpscalerProvider"
-    }
-  },
-  "50": {
-    "inputs": {
-      "model_name": "4x-UltraSharp.pth"
-    },
-    "class_type": "UpscaleModelLoader",
-    "_meta": {
-      "title": "Load Upscale Model"
-    }
-  },
-  "51": {
-    "inputs": {
-      "upscale_factor": 2,
-      "steps": 1,
-      "temp_prefix": "",
-      "upscaler": [
-        "49",
-        0
-      ],
-      "vae": [
-        "4",
-        2
-      ]
-    },
-    "class_type": "IterativeImageUpscale",
-    "_meta": {
-      "title": "Iterative Upscale (Image)"
-    }
-  },
-  "52": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "51",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "UpscaledImage"
-    }
-  },
-  "54": {
-    "inputs": {
-      "instantid_file": "ip-adapter.bin"
-    },
-    "class_type": "InstantIDModelLoader",
-    "_meta": {
-      "title": "Load InstantID Model"
-    }
-  },
-  "55": {
-    "inputs": {
-      "control_net_name": "instantid_controlnet.safetensors"
-    },
-    "class_type": "ControlNetLoader",
-    "_meta": {
-      "title": "Load ControlNet Model"
-    }
-  },
-  "56": {
-    "inputs": {
-      "strength": 0.65,
-      "start_percent": 0,
-      "end_percent": 1,
-      "positive": [
-        "58",
-        1
-      ],
-      "negative": [
-        "58",
-        2
-      ],
-      "control_net": [
-        "55",
-        0
-      ],
-      "image": [
-        "59",
-        0
-      ]
-    },
-    "class_type": "ControlNetApplyAdvanced",
-    "_meta": {
-      "title": "Apply ControlNet (Advanced)"
-    }
-  },
-  "57": {
-    "inputs": {
-      "provider": "CPU"
-    },
-    "class_type": "InstantIDFaceAnalysis",
-    "_meta": {
-      "title": "InstantID Face Analysis"
-    }
-  },
-  "58": {
-    "inputs": {
-      "weight": 0.8,
-      "start_at": 0,
-      "end_at": 1,
-      "instantid": [
-        "54",
-        0
-      ],
-      "insightface": [
-        "57",
-        0
-      ],
-      "image_features": [
-        "14",
-        0
-      ],
-      "model": [
-        "61",
-        0
-      ],
-      "positive": [
-        "6",
-        0
-      ],
-      "negative": [
-        "7",
-        0
-      ]
-    },
-    "class_type": "ApplyInstantID",
-    "_meta": {
-      "title": "Apply InstantID"
-    }
-  },
-  "59": {
-    "inputs": {
-      "faceanalysis": [
-        "57",
-        0
-      ],
-      "image": [
-        "14",
-        0
-      ]
-    },
-    "class_type": "FaceKeypointsPreprocessor",
-    "_meta": {
-      "title": "Face Keypoints Preprocessor"
-    }
-  },
-  "60": {
-    "inputs": {
-      "lora_name": "3DMM_V12.safetensors",
-      "strength_model": 0,
-      "strength_clip": 0,
-      "model": [
-        "48",
-        0
-      ],
-      "clip": [
-        "48",
-        1
-      ]
-    },
-    "class_type": "LoraLoader",
-    "_meta": {
-      "title": "Load LoRA"
-    }
-  },
   "61": {
     "inputs": {
       "lora_name": "3DMM_V12.safetensors",
       "strength_model": 0,
       "strength_clip": 0,
       "model": [
-        "60",
+        "4",
         0
       ],
       "clip": [
-        "60",
+        "4",
         1
       ]
     },
     "class_type": "LoraLoader",
     "_meta": {
-      "title": "Load LoRA"
+      "title": "LoadStyleLora"
     }
   },
   "62": {
     "inputs": {
       "filename_prefix": "ComfyUI",
       "images": [
-        "40",
+        "8",
         0
       ]
     },
     "class_type": "SaveImage",
     "_meta": {
-      "title": "FaceDetailerImage"
-    }
-  },
-  "63": {
-    "inputs": {
-      "image": "art (1).jpg",
-      "upload": "image"
-    },
-    "class_type": "LoadImage",
-    "_meta": {
-      "title": "UpscaleInputImage"
+      "title": "Save Image"
     }
   }
 }

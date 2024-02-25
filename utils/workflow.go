@@ -39,6 +39,16 @@ func (node *BaseNode) UpdateOutputImage(config OutputImage) {
 		node.Inputs["height"] = config.Height
 	}
 }
+func (node *BaseNode) UpdateImagePrefix(prefix string) {
+	if node.ClassType == "SaveImage" {
+		node.Inputs["filename_prefix"] = prefix
+	}
+}
+func (node *BaseNode) UpdateInputImage(image string) {
+	if node.ClassType == "LoadImage" {
+		node.Inputs["image"] = image
+	}
+}
 func (node *BaseNode) UpdateSampler(config Sampler) {
 	if _, ok := node.Inputs["cfg"]; ok {
 		node.Inputs["cfg"] = config.Cfg

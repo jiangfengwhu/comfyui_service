@@ -1,0 +1,177 @@
+{
+  "10": {
+    "class_type": "CLIPSetLastLayer",
+    "inputs": {
+      "clip": [
+        "12",
+        1
+      ],
+      "stop_at_clip_layer": -2
+    },
+    "_meta": {
+      "title": "CLIP Set Last Layer"
+    }
+  },
+  "12": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "clip": [
+        "lora_1",
+        1
+      ],
+      "lora_name": "xx",
+      "model": [
+        "lora_1",
+        0
+      ],
+      "strength_clip": 1,
+      "strength_model": 0.1
+    },
+    "_meta": {
+      "title": "LoadStyleLoRA"
+    }
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "cfg": 7,
+      "denoise": 1,
+      "latent_image": [
+        "5",
+        0
+      ],
+      "model": [
+        "12",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "seed": 13312580470774802335,
+      "steps": 35
+    },
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "sd1.5\\dreamshaper_8.safetensors"
+    },
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "batch_size": 4,
+      "height": 778,
+      "width": 512
+    },
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "10",
+        0
+      ],
+      "text": "(masterpiece),(best quality:1.4),flowers and petals,Long bob,(grey dress),dagger,exquisite detail,awesome full color,magic circle,[water ripples],[swirl]"
+    },
+    "_meta": {
+      "title": "正向提示词"
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "10",
+        0
+      ],
+      "text": "(worst quality:1.6, low quality:1.6), (zombie, sketch, interlocked fingers),Cross-eyed\nEasyNegative, (((2 heads))), (((duplicate))), ((malformed hand)), ((deformed arm)), ((twisted fingers)),((extra fingers)),\nblurry, abstract, deformed, figure, framed, 3d,bad art, poorly drawn, \nextra limbs, close up, weird colors, watermark, blur haze, long neck, \nelongated body, cropped image,out of frame, draft, (((deformed hands))), \n double image, ((malformed hands)), multiple heads, extra limb, ugly, \n((poorly drawn hands)), missing limb, cut-off, grain, bad anatomy, poorly drawn face, mutation, mutated, floating limbs, disconnected limbs, out of focus, long body, disgusting, cloned face, missing legs"
+    },
+    "_meta": {
+      "title": "负向提示词"
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "lora_1": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "clip": [
+        "lora_2",
+        1
+      ],
+      "lora_name": "yy",
+      "model": [
+        "lora_2",
+        0
+      ],
+      "strength_clip": 1,
+      "strength_model": 0.2
+    },
+    "_meta": {
+      "title": "LoadStyleLoRA"
+    }
+  },
+  "lora_2": {
+    "class_type": "LoraLoader",
+    "inputs": {
+      "clip": [
+        "lora_1",
+        1
+      ],
+      "lora_name": "zz",
+      "model": [
+        "lora_1",
+        0
+      ],
+      "strength_clip": 1,
+      "strength_model": 0.3
+    },
+    "_meta": {
+      "title": "LoadStyleLoRA"
+    }
+  }
+}
