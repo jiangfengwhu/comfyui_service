@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type Meta struct {
@@ -132,10 +133,18 @@ func ReadWorkflowFile(workflowType string) Workflow {
 	if val, ok := WorkflowPool[workflowType]; ok {
 		return val
 	}
-	file, err := os.ReadFile(filepath.Join(Config.WorkflowDir, workflowType+".json"))
+	err := addToWorkflowPool(workflowType)
+	if err != nil {
+		return Workflow{}
+	}
+	return WorkflowPool[workflowType]
+}
+
+func addToWorkflowPool(tmpType string) error {
+	file, err := os.ReadFile(filepath.Join(Config.WorkflowDir, tmpType+".json"))
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)
-		return Workflow{}
+		return err
 	}
 
 	// 解析JSON数据到 map[string]interface{}
@@ -143,10 +152,31 @@ func ReadWorkflowFile(workflowType string) Workflow {
 	err = json.Unmarshal(file, &data)
 	if err != nil {
 		fmt.Println("Error parsing JSON:", err)
-		return Workflow{}
+		return err
 	}
-	WorkflowPool[workflowType] = Workflow{Prompt: data}
-	return WorkflowPool[workflowType]
+	WorkflowPool[tmpType] = Workflow{Prompt: data}
+	return nil
+}
+
+func UpdateWorkflowPool() {
+	files, err := os.ReadDir(Config.WorkflowDir)
+	if err != nil {
+		fmt.Println("Error reading directory:", err)
+		return
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		fileName := file.Name()
+		if filepath.Ext(fileName) != ".json" {
+			continue
+		}
+		err := addToWorkflowPool(strings.TrimSuffix(fileName, ".json"))
+		if err != nil {
+			fmt.Println("Error reading file:", err)
+		}
+	}
 }
 
 func WriteWorkflowFile(workflow Workflow) {

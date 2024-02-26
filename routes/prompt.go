@@ -96,3 +96,13 @@ func QueuePrompt(c *gin.Context) {
 func GetTemplates(c *gin.Context) {
 	c.JSON(http.StatusOK, model.Response{Code: 0, Data: utils.GetAllTemplateId()})
 }
+
+func UpdateTemplate(c *gin.Context) {
+	utils.UpdateTemplatePool()
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success"})
+}
+
+func UpdateWorkflow(c *gin.Context) {
+	utils.UpdateWorkflowPool()
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success"})
+}
