@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/goccy/go-json"
-	"io"
 	"net/http"
 	"os"
 	"time"
@@ -38,18 +37,20 @@ func InitConfig() {
 }
 
 func ReportIpAddr() {
-	res, _ := http.Get("https://api.ipify.org/")
-	defer res.Body.Close()
-
-	body, _ := io.ReadAll(res.Body)
-	http.Post(
+	resp, err := http.Post(
 		Config.AddressUpdateUrl,
 		"application/json",
-		bytes.NewBuffer([]byte(fmt.Sprintf(`{"addr":"%s","type":"t2i_addr"}`, string(body)))),
+		bytes.NewBuffer([]byte(`{"type":"t2i_addr"}`)),
 	)
+	if err != nil {
+		fmt.Println("Error Report Ip Addr:", err)
+		return
+	}
+	defer resp.Body.Close()
 }
 
 func StartReportIpAddr() {
+	ReportIpAddr()
 	ticker := time.NewTicker(5 * time.Minute)
 	go func() {
 		for {
