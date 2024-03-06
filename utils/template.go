@@ -35,6 +35,11 @@ type PromptTemplate struct {
 	Name        string      `json:"name,omitempty"`
 	Desc        string      `json:"desc,omitempty"`
 }
+type ImageItem struct {
+	Id   string `json:"id"`
+	Url  string `json:"url"`
+	Desc string `json:"desc"`
+}
 
 var TemplatePool = map[string]PromptTemplate{}
 
@@ -93,4 +98,22 @@ func GetAllTemplateId() []interface{} {
 		keys = append(keys, map[string]interface{}{"id": key, "desc": val.Desc})
 	}
 	return keys
+}
+
+var homeList []ImageItem
+
+func GetHomeList(refresh bool) []ImageItem {
+	if homeList == nil || refresh {
+		file, err := os.ReadFile("./home.json")
+		if err != nil {
+			fmt.Println("Error reading JSON file:", err)
+			return nil
+		}
+		err = json.Unmarshal(file, &homeList)
+		if err != nil {
+			fmt.Println("Error parsing JSON:", err)
+			return nil
+		}
+	}
+	return homeList
 }

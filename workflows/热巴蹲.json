@@ -1,0 +1,318 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 361983907641874,
+      "steps": 25,
+      "cfg": 7,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "73",
+        0
+      ],
+      "positive": [
+        "68",
+        0
+      ],
+      "negative": [
+        "40",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "sd1.5\\ghostmix_v20Bakedvae.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "5": {
+    "inputs": {
+      "width": 512,
+      "height": 768,
+      "batch_size": 4
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "15": {
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "39": {
+    "inputs": {
+      "text": "a girl with wings,white dress,beautiful detailed eyes,beautiful detailed lips,extremely detailed eyes and face,long eyelashes,curly hair,sparkling eyes,smiling,open mouth,18 years old,one girl,bending down,short skirt,golden palace,stone floor,ornate columns,high ceilings,large windows,daylight,soft light,detail,best quality,4k,8k,highres,masterpiece:1.2),ultra-detailed,(realistic,photorealistic,photo-realistic:1.37),HDR,UHD,studio lighting,ultra-fine painting,sharp focus,physically-based rendering,extreme detail description,professional,vivid colors,bokeh,feet\n",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "正向提示词"
+    }
+  },
+  "40": {
+    "inputs": {
+      "text": " embedding:badhandv4, multiple legs,multiple faces, multiple headsS, deformed",
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "负向提示词"
+    }
+  },
+  "67": {
+    "inputs": {
+      "image": "1 (2).png",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "68": {
+    "inputs": {
+      "strength": 1,
+      "conditioning": [
+        "39",
+        0
+      ],
+      "control_net": [
+        "69",
+        0
+      ],
+      "image": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet"
+    }
+  },
+  "69": {
+    "inputs": {
+      "control_net_name": "controlnetFor_densepose_v10.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "70": {
+    "inputs": {
+      "preprocessor": "DensePosePreprocessor",
+      "resolution": 512,
+      "image": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "AIO_Preprocessor",
+    "_meta": {
+      "title": "AIO Aux Preprocessor"
+    }
+  },
+  "71": {
+    "inputs": {
+      "images": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "13": {
+    "inputs": {
+      "image": "60f54be916454994bd1b032fa52e0c7a.jpeg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "73": {
+    "inputs": {
+      "weight": 0.9,
+      "noise": 0,
+      "weight_type": "original",
+      "start_at": 0,
+      "end_at": 1,
+      "faceid_v2": false,
+      "weight_v2": 1,
+      "unfold_batch": false,
+      "ipadapter": [
+        "74",
+        0
+      ],
+      "clip_vision": [
+        "75",
+        0
+      ],
+      "insightface": [
+        "76",
+        0
+      ],
+      "image": [
+        "13",
+        0
+      ],
+      "model": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "IPAdapterApplyFaceID",
+    "_meta": {
+      "title": "Apply IPAdapter FaceID"
+    }
+  },
+  "74": {
+    "inputs": {
+      "ipadapter_file": "ipadapter\\ip-adapter-faceid-portrait-v11_sd15.bin"
+    },
+    "class_type": "IPAdapterModelLoader",
+    "_meta": {
+      "title": "Load IPAdapter Model"
+    }
+  },
+  "75": {
+    "inputs": {
+      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "76": {
+    "inputs": {
+      "provider": "CPU"
+    },
+    "class_type": "InsightFaceLoader",
+    "_meta": {
+      "title": "Load InsightFace"
+    }
+  },
+  "77": {
+    "inputs": {
+      "model_name": "4x_Fatality_Comix_260000_G.pth"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Load Upscale Model"
+    }
+  },
+  "78": {
+    "inputs": {
+      "upscale_by": 1.5,
+      "seed": 782424478244636,
+      "steps": 20,
+      "cfg": 7,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 0.2,
+      "mode_type": "Linear",
+      "tile_width": 512,
+      "tile_height": 512,
+      "mask_blur": 8,
+      "tile_padding": 32,
+      "seam_fix_mode": "None",
+      "seam_fix_denoise": 1,
+      "seam_fix_width": 64,
+      "seam_fix_mask_blur": 8,
+      "seam_fix_padding": 16,
+      "force_uniform_tiles": true,
+      "tiled_decode": false,
+      "image": [
+        "8",
+        0
+      ],
+      "model": [
+        "73",
+        0
+      ],
+      "positive": [
+        "68",
+        0
+      ],
+      "negative": [
+        "40",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ],
+      "upscale_model": [
+        "77",
+        0
+      ]
+    },
+    "class_type": "UltimateSDUpscale",
+    "_meta": {
+      "title": "Ultimate SD Upscale"
+    }
+  },
+  "79": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  }
+}

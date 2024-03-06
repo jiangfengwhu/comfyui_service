@@ -1,26 +1,23 @@
 {
   "sampler": {
-    "steps": 35,
-    "cfg": 7,
-    "sampler_name": "dpmpp_2m",
+    "steps": 8,
+    "cfg": 2,
+    "sampler_name": "dpmpp_sde",
     "scheduler": "karras"
   },
-  "type": "base",
+  "type": "instantId",
   "lora": {
-    "xx": 0.1,
-    "yy": 0.2,
-    "zz": 0.3
   },
-  "check_point": "sd1.5\\dreamshaper_8.safetensors",
+  "check_point": "sdxl\\dreamshaperXL_v2TurboDpmppSDE.safetensors",
   "output_image": {
-    "width": 512,
-    "height": 778,
-    "batch_size": 4
+    "width": 768,
+    "height": 1024,
+    "batch_size": 1
   },
   "prompt_group": {
-    "negative": "(worst quality:1.6, low quality:1.6), (zombie, sketch, interlocked fingers),Cross-eyed\nEasyNegative, (((2 heads))), (((duplicate))), ((malformed hand)), ((deformed arm)), ((twisted fingers)),((extra fingers)),\nblurry, abstract, deformed, figure, framed, 3d,bad art, poorly drawn, \nextra limbs, close up, weird colors, watermark, blur haze, long neck, \nelongated body, cropped image,out of frame, draft, (((deformed hands))), \n double image, ((malformed hands)), multiple heads, extra limb, ugly, \n((poorly drawn hands)), missing limb, cut-off, grain, bad anatomy, poorly drawn face, mutation, mutated, floating limbs, disconnected limbs, out of focus, long body, disgusting, cloned face, missing legs",
-    "positive": "(masterpiece),(best quality:1.4),flowers and petals,Long bob,(grey dress),dagger,exquisite detail,awesome full color,magic circle,[water ripples],[swirl]"
+    "negative": "(low quality, worst quality, bad quality, lowres:1.2), bad photo, bad art, oversaturated, watermark, username, signature, text, error, cropped, jpeg artifacts, autograph, trademark, canvas frame, canvas border, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, bad feet, extra fingers, mutated hands, poorly drawn hands, bad proportions, extra limbs, disfigured, bad anatomy, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, mutated hands, fused fingers, too many fingers, long neck",
+    "positive": "(avant-garde exceptional magnum by Emil Nolde and Claudia Rueda:1.2), (psychedelic oil painting:0.1),spotlit with sparkling light, enigmatic andsomber and dramatic atmosphere,(radiant pyrrole red and champagne color saturation:0.1),superior details,crisp details, out-of-focus area,"
   },
   "name": "test",
-  "desc": "测试用模版"
+  "desc": "复古风格人像"
 }

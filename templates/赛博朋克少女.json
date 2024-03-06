@@ -1,0 +1,23 @@
+{
+  "sampler": {
+    "steps": 6,
+    "cfg": 1.5,
+    "sampler_name": "dpmpp_sde",
+    "scheduler": "karras"
+  },
+  "type": "instantId",
+  "lora": {
+  },
+  "check_point": "sdxl\\juggernautXL_v9Rdphoto2Lightning.safetensors",
+  "output_image": {
+    "width": 768,
+    "height": 1024,
+    "batch_size": 1
+  },
+  "prompt_group": {
+    "negative": "nude,naked",
+    "positive": "Hyperrealistic portrait of a girl with intense gaze, intricate facial tattoos, colorful hair, and vibrant lighting.Set against a dystopian cityscape background, reminiscent of cyberpunk art. Masterpiece digital artwork by Greg Rutkowsky and Hayao Miyazaki."
+  },
+  "name": "cyberpaunk",
+  "desc": "赛博朋克少女，融合了Greg Rutkowsky 和 Hayao Miyazaki风格"
+}

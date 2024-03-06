@@ -1,23 +1,23 @@
 {
   "3": {
     "inputs": {
-      "seed": 505824969797218,
+      "seed": 360302182575987,
       "steps": 7,
       "cfg": 2.6,
       "sampler_name": "dpmpp_sde",
       "scheduler": "karras",
       "denoise": 1,
       "model": [
-        "57",
+        "63",
         0
       ],
       "positive": [
-        "23",
-        0
+        "63",
+        1
       ],
       "negative": [
-        "23",
-        1
+        "63",
+        2
       ],
       "latent_image": [
         "5",
@@ -93,33 +93,6 @@
       "title": "Load ControlNet Model"
     }
   },
-  "23": {
-    "inputs": {
-      "strength": 0.65,
-      "start_percent": 0,
-      "end_percent": 1,
-      "positive": [
-        "57",
-        1
-      ],
-      "negative": [
-        "57",
-        2
-      ],
-      "control_net": [
-        "16",
-        0
-      ],
-      "image": [
-        "58",
-        0
-      ]
-    },
-    "class_type": "ControlNetApplyAdvanced",
-    "_meta": {
-      "title": "Apply ControlNet (Advanced)"
-    }
-  },
   "38": {
     "inputs": {
       "provider": "CPU"
@@ -155,57 +128,6 @@
       "title": "负向提示词"
     }
   },
-  "57": {
-    "inputs": {
-      "weight": 0.8,
-      "start_at": 0,
-      "end_at": 1,
-      "instantid": [
-        "11",
-        0
-      ],
-      "insightface": [
-        "38",
-        0
-      ],
-      "image_features": [
-        "13",
-        0
-      ],
-      "model": [
-        "61",
-        0
-      ],
-      "positive": [
-        "39",
-        0
-      ],
-      "negative": [
-        "40",
-        0
-      ]
-    },
-    "class_type": "ApplyInstantID",
-    "_meta": {
-      "title": "Apply InstantID"
-    }
-  },
-  "58": {
-    "inputs": {
-      "faceanalysis": [
-        "38",
-        0
-      ],
-      "image": [
-        "13",
-        0
-      ]
-    },
-    "class_type": "FaceKeypointsPreprocessor",
-    "_meta": {
-      "title": "Face Keypoints Preprocessor"
-    }
-  },
   "60": {
     "inputs": {
       "stop_at_clip_layer": -2,
@@ -235,7 +157,7 @@
     },
     "class_type": "LoraLoader",
     "_meta": {
-      "title": "LoadStyleLora"
+      "title": "LoadStyleLoRA"
     }
   },
   "62": {
@@ -249,6 +171,45 @@
     "class_type": "SaveImage",
     "_meta": {
       "title": "Save Image"
+    }
+  },
+  "63": {
+    "inputs": {
+      "weight": 0.8,
+      "start_at": 0,
+      "end_at": 1,
+      "instantid": [
+        "11",
+        0
+      ],
+      "insightface": [
+        "38",
+        0
+      ],
+      "control_net": [
+        "16",
+        0
+      ],
+      "image": [
+        "13",
+        0
+      ],
+      "model": [
+        "61",
+        0
+      ],
+      "positive": [
+        "39",
+        0
+      ],
+      "negative": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "ApplyInstantID",
+    "_meta": {
+      "title": "Apply InstantID"
     }
   }
 }

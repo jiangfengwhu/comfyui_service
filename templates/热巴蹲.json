@@ -1,0 +1,23 @@
+{
+  "sampler": {
+    "steps": 25,
+    "cfg": 7,
+    "sampler_name": "euler_ancestral",
+    "scheduler": "normal"
+  },
+  "type": "热巴蹲",
+  "lora": {
+  },
+  "check_point": "sd1.5\\ghostmix_v20Bakedvae.safetensors",
+  "output_image": {
+    "width": 512,
+    "height": 768,
+    "batch_size": 1
+  },
+  "prompt_group": {
+    "negative": "embedding:badhandv4, multiple legs,multiple faces, multiple headsS, deformed",
+    "positive": "a girl with wings,white dress,beautiful detailed eyes,beautiful detailed lips,extremely detailed eyes and face,long eyelashes,curly hair,sparkling eyes,smiling,open mouth,18 years old,one girl,bending down,short skirt,golden palace,stone floor,ornate columns,high ceilings,large windows,daylight,soft light,detail,best quality,4k,8k,highres,masterpiece:1.2),ultra-detailed,(realistic,photorealistic,photo-realistic:1.37),HDR,UHD,studio lighting,ultra-fine painting,sharp focus,physically-based rendering,extreme detail description,professional,vivid colors,bokeh,feet"
+  },
+  "name": "reba",
+  "desc": "迪丽热巴同款天使蹲，麻麻再也不用担心我骨折了"
+}

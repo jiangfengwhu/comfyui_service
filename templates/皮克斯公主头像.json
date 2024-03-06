@@ -1,0 +1,23 @@
+{
+  "sampler": {
+    "steps": 30,
+    "cfg": 7,
+    "sampler_name": "euler_ancestral",
+    "scheduler": "karras"
+  },
+  "type": "face_portrait",
+  "lora": {
+  },
+  "check_point": "sd1.5\\ipDESIGN3D_v31.safetensors",
+  "output_image": {
+    "width": 512,
+    "height": 512,
+    "batch_size": 1
+  },
+  "prompt_group": {
+    "negative": "",
+    "positive": "pixar style, 1girl, solo,blonde hair, long hair, princess peach, blue eyes, lips, eyelashes, earrings, crown,looking at viewer,  hood, casual, simple background"
+  },
+  "name": "Pixar",
+  "desc": "皮克斯风格、公主头像、皇冠"
+}

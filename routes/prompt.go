@@ -94,7 +94,8 @@ func QueuePrompt(c *gin.Context) {
 }
 
 func GetTemplates(c *gin.Context) {
-	c.JSON(http.StatusOK, model.Response{Code: 0, Data: utils.GetAllTemplateId()})
+	refresh := c.Query("refresh")
+	c.JSON(http.StatusOK, model.Response{Code: 0, Data: utils.GetHomeList(refresh == "true")})
 }
 
 func UpdateTemplate(c *gin.Context) {
