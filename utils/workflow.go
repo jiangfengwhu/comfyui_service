@@ -40,9 +40,11 @@ func (node *BaseNode) UpdateOutputImage(config OutputImage) {
 		node.Inputs["height"] = config.Height
 	}
 }
-func (node *BaseNode) UpdateImagePrefix(prefix string) {
-	if node.ClassType == "SaveImage" {
+func (node *BaseNode) UpdateImagePrefix(prefix string, path string, ext string) {
+	if node.Meta.Title == "SaveImage" {
 		node.Inputs["filename_prefix"] = prefix
+		node.Inputs["output_path"] = path
+		node.Inputs["extension"] = ext
 	}
 }
 func (node *BaseNode) UpdateInputImage(image string) {

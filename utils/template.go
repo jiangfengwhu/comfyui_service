@@ -36,9 +36,8 @@ type PromptTemplate struct {
 	Desc        string      `json:"desc,omitempty"`
 }
 type ImageItem struct {
-	Id   string `json:"id"`
-	Url  string `json:"url"`
-	Desc string `json:"desc"`
+	Id  string `json:"id"`
+	Url string `json:"url"`
 }
 
 var TemplatePool = map[string]PromptTemplate{}
@@ -104,15 +103,22 @@ var homeList []ImageItem
 
 func GetHomeList(refresh bool) []ImageItem {
 	if homeList == nil || refresh {
-		file, err := os.ReadFile("./home.json")
+		homeList = []ImageItem{}
+		files, err := os.ReadDir(Config.HomeImgDir)
 		if err != nil {
-			fmt.Println("Error reading JSON file:", err)
-			return nil
+			fmt.Println("Error reading directory:", err)
+			return []ImageItem{}
 		}
-		err = json.Unmarshal(file, &homeList)
-		if err != nil {
-			fmt.Println("Error parsing JSON:", err)
-			return nil
+		for _, file := range files {
+			if file.IsDir() {
+				continue
+			}
+			fileName := file.Name()
+			if filepath.Ext(fileName) != ".webp" || filepath.Ext(fileName) != ".jpg" {
+				continue
+			}
+			chunks := strings.Split(fileName, "_")
+			homeList = append(homeList, ImageItem{Id: chunks[0], Url: fileName})
 		}
 	}
 	return homeList

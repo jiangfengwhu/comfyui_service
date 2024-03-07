@@ -16,6 +16,7 @@ type QueuePromptReq struct {
 	Type       string            `json:"type" binding:"required"`
 	TemplateId string            `json:"template_id" binding:"required"`
 	Images     map[string]string `json:"images,omitempty"`
+	HomeMode   bool              `json:"home_mode,omitempty"`
 }
 
 type ImageUploadReq struct {
@@ -79,7 +80,11 @@ func QueuePrompt(c *gin.Context) {
 		val.UpdateSampler(promptTemplate.Sampler)
 		val.UpdateModel(promptTemplate.CheckPoint)
 		val.UpdateOutputImage(promptTemplate.OutputImage)
-		val.UpdateImagePrefix(outputPrefix)
+		if req.HomeMode {
+			val.UpdateImagePrefix(req.TemplateId, "home", "webp")
+		} else {
+			val.UpdateImagePrefix(outputPrefix, "", "jpg")
+		}
 		if img, ok := req.Images[key]; ok {
 			val.UpdateInputImage(img)
 		}
@@ -94,6 +99,10 @@ func QueuePrompt(c *gin.Context) {
 }
 
 func GetTemplates(c *gin.Context) {
+	c.JSON(http.StatusOK, model.Response{Code: 0, Data: utils.GetAllTemplateId()})
+}
+
+func GetHomeList(c *gin.Context) {
 	refresh := c.Query("refresh")
 	c.JSON(http.StatusOK, model.Response{Code: 0, Data: utils.GetHomeList(refresh == "true")})
 }

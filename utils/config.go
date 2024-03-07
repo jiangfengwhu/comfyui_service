@@ -14,6 +14,7 @@ type ServerConfig struct {
 	AddressUpdateUrl string `json:"address_update_url"`
 	WorkflowDir      string `json:"workflow_dir"`
 	TemplateDir      string `json:"template_dir"`
+	HomeImgDir       string `json:"home_img_dir"`
 }
 
 func (config *ServerConfig) String() string {
