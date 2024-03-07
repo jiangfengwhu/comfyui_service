@@ -217,19 +217,6 @@
       "title": "Load Upscale Model"
     }
   },
-  "91": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "94",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "Save Image"
-    }
-  },
   "94": {
     "inputs": {
       "upscale_by": 2,
@@ -279,6 +266,31 @@
     "class_type": "UltimateSDUpscale",
     "_meta": {
       "title": "Ultimate SD Upscale"
+    }
+  },
+  "96": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "ComfyUI",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "quality": 90,
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "false",
+      "show_previews": "true",
+      "images": [
+        "94",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "SaveImage"
     }
   }
 }

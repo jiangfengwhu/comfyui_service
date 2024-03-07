@@ -1,7 +1,7 @@
 {
   "3": {
     "inputs": {
-      "seed": 361983907641874,
+      "seed": 384460762572649,
       "steps": 25,
       "cfg": 7,
       "sampler_name": "euler_ancestral",
@@ -254,7 +254,7 @@
   "78": {
     "inputs": {
       "upscale_by": 1.5,
-      "seed": 782424478244636,
+      "seed": 96788012282126,
       "steps": 20,
       "cfg": 7,
       "sampler_name": "euler_ancestral",
@@ -302,17 +302,29 @@
       "title": "Ultimate SD Upscale"
     }
   },
-  "79": {
+  "80": {
     "inputs": {
+      "output_path": "",
       "filename_prefix": "ComfyUI",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "quality": 90,
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "false",
+      "show_previews": "true",
       "images": [
         "78",
         0
       ]
     },
-    "class_type": "SaveImage",
+    "class_type": "Image Save",
     "_meta": {
-      "title": "Save Image"
+      "title": "SaveImage"
     }
   }
 }

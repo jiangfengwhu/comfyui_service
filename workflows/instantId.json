@@ -76,7 +76,7 @@
   },
   "13": {
     "inputs": {
-      "image": "b03533fa828ba61ea8d32bab8379800a304e241ff3ab.jpg",
+      "image": "杨幂.jpg",
       "upload": "image"
     },
     "class_type": "LoadImage",
@@ -160,19 +160,6 @@
       "title": "LoadStyleLoRA"
     }
   },
-  "62": {
-    "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": [
-        "8",
-        0
-      ]
-    },
-    "class_type": "SaveImage",
-    "_meta": {
-      "title": "Save Image"
-    }
-  },
   "63": {
     "inputs": {
       "weight": 0.8,
@@ -210,6 +197,31 @@
     "class_type": "ApplyInstantID",
     "_meta": {
       "title": "Apply InstantID"
+    }
+  },
+  "64": {
+    "inputs": {
+      "output_path": "",
+      "filename_prefix": "ComfyUI",
+      "filename_delimiter": "_",
+      "filename_number_padding": 4,
+      "filename_number_start": "false",
+      "extension": "jpg",
+      "quality": 90,
+      "lossless_webp": "false",
+      "overwrite_mode": "false",
+      "show_history": "false",
+      "show_history_by_prefix": "true",
+      "embed_workflow": "false",
+      "show_previews": "true",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Image Save",
+    "_meta": {
+      "title": "SaveImage"
     }
   }
 }

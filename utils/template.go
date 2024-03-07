@@ -114,9 +114,6 @@ func GetHomeList(refresh bool) []ImageItem {
 				continue
 			}
 			fileName := file.Name()
-			if filepath.Ext(fileName) != ".webp" || filepath.Ext(fileName) != ".jpg" {
-				continue
-			}
 			chunks := strings.Split(fileName, "_")
 			homeList = append(homeList, ImageItem{Id: chunks[0], Url: fileName})
 		}
