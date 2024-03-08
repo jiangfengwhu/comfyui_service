@@ -36,8 +36,10 @@ type PromptTemplate struct {
 	Desc        string      `json:"desc,omitempty"`
 }
 type ImageItem struct {
-	Id  string `json:"id"`
-	Url string `json:"url"`
+	Id     string `json:"id"`
+	Url    string `json:"url"`
+	Width  string `json:"width"`
+	Height string `json:"height"`
 }
 
 var TemplatePool = map[string]PromptTemplate{}
@@ -115,7 +117,7 @@ func GetHomeList(refresh bool) []ImageItem {
 			}
 			fileName := file.Name()
 			chunks := strings.Split(fileName, "_")
-			homeList = append(homeList, ImageItem{Id: chunks[0], Url: fileName})
+			homeList = append(homeList, ImageItem{Id: chunks[0], Url: fileName, Width: chunks[1], Height: chunks[2]})
 		}
 	}
 	return homeList

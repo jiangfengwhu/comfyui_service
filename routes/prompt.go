@@ -81,7 +81,8 @@ func QueuePrompt(c *gin.Context) {
 		val.UpdateModel(promptTemplate.CheckPoint)
 		val.UpdateOutputImage(promptTemplate.OutputImage)
 		if req.HomeMode {
-			val.UpdateImagePrefix(req.TemplateId, "home", "webp")
+			prefix := fmt.Sprintf("%s_%d_%d", req.TemplateId, promptTemplate.OutputImage.Width, promptTemplate.OutputImage.Height)
+			val.UpdateImagePrefix(prefix, "home", "webp")
 		} else {
 			val.UpdateImagePrefix(outputPrefix, "", "jpg")
 		}
