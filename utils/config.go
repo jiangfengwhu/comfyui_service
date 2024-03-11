@@ -15,6 +15,7 @@ type ServerConfig struct {
 	WorkflowDir      string `json:"workflow_dir"`
 	TemplateDir      string `json:"template_dir"`
 	HomeImgDir       string `json:"home_img_dir"`
+	MongoUrl         string `json:"mongo_url"`
 }
 
 func (config *ServerConfig) String() string {
