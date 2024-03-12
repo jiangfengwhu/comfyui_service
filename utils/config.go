@@ -16,6 +16,8 @@ type ServerConfig struct {
 	TemplateDir      string `json:"template_dir"`
 	HomeImgDir       string `json:"home_img_dir"`
 	MongoUrl         string `json:"mongo_url"`
+	APPID            string `json:"appid"`
+	APPSecret        string `json:"app_secret"`
 }
 
 func (config *ServerConfig) String() string {
