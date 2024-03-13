@@ -2,11 +2,13 @@ package routes
 
 import (
 	"bytes"
+	"comfyui_service/db"
 	"comfyui_service/model"
 	"comfyui_service/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
+	"go.mongodb.org/mongo-driver/bson"
 	"io"
 	"log"
 	"net/http"
@@ -116,4 +118,44 @@ func UpdateTemplate(c *gin.Context) {
 func UpdateWorkflow(c *gin.Context) {
 	utils.UpdateWorkflowPool()
 	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success"})
+}
+
+func MiniQueuePrompt(c *gin.Context) {
+	var req QueuePromptReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	user := c.MustGet("user").(db.User)
+	if user.Tickets < 1 {
+		c.JSON(http.StatusOK, model.Response{
+			Code: -1,
+			Msg:  "额度不足",
+		})
+		return
+	}
+	var promptTemplate = utils.ReadPromptTemplate(req.TemplateId)
+	workflowId := promptTemplate.Type
+	var prompt = utils.ReadWorkflowFile(workflowId)
+	outputPrefix := utils.GetUUID()
+	prompt.Process(func(key string, val utils.BaseNode) {
+		val.UpdatePrompt(promptTemplate.PromptGroup)
+		val.UpdateSampler(promptTemplate.Sampler)
+		val.UpdateModel(promptTemplate.CheckPoint)
+		val.UpdateOutputImage(promptTemplate.OutputImage)
+		val.UpdateImagePrefix(outputPrefix, "", "jpg")
+		if img, ok := req.Images[key]; ok {
+			val.UpdateInputImage(img)
+		}
+	})
+	prompt.AddLora(promptTemplate.Lora)
+	promptId, err := queuePrompt(prompt.Prompt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, model.Response{Code: -1, Msg: "加入队列失败" + err.Error()})
+		return
+	}
+	filter := bson.M{"_id": user.Id}
+	updater := bson.M{"$set": bson.M{"tickets": user.Tickets - 1}, "$push": bson.M{"history": outputPrefix}}
+	db.UpdateUserOne(filter, updater)
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: map[string]string{"prompt_id": promptId, "output_prefix": outputPrefix}})
 }

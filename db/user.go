@@ -4,6 +4,8 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type WxLoginSession struct {
@@ -25,6 +27,7 @@ type User struct {
 	Avatar   string             `bson:"avatar" json:"avatar"`
 	Id       primitive.ObjectID `bson:"_id" json:"id"`
 	Tickets  int                `bson:"tickets" json:"tickets"`
+	History  []string           `bson:"history" json:"history"`
 }
 
 func FindUser(user WxLoginSession) (User, error) {
@@ -41,4 +44,8 @@ func AddUser(user WxLoginSession) (User, error) {
 	}
 	userResp.Id = result.InsertedID.(primitive.ObjectID)
 	return userResp, nil
+}
+
+func UpdateUserOne(filter interface{}, data interface{}) (*mongo.UpdateResult, error) {
+	return db.user.UpdateOne(context.TODO(), filter, data, options.Update().SetUpsert(true))
 }

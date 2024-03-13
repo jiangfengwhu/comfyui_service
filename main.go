@@ -26,6 +26,7 @@ func main() {
 	miniAuth := r.Group("/wx")
 	miniAuth.Use(db.AuthRequired)
 	{
+		miniAuth.POST("/queue_prompt", routes.MiniQueuePrompt)
 		miniAuth.GET("/user_info", routes.UserInfo)
 	}
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
