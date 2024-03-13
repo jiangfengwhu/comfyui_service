@@ -58,5 +58,10 @@ func Login(c *gin.Context) {
 			}
 		}
 	}
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: map[string]interface{}{"user": user, "token": wxUser.OpenId}})
+}
+
+func UserInfo(c *gin.Context) {
+	user, _ := c.Get("user")
 	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: user})
 }

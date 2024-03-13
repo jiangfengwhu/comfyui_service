@@ -22,11 +22,11 @@ func main() {
 	r.GET("/refresh_template", routes.UpdateTemplate)
 	r.GET("/refresh_workflow", routes.UpdateWorkflow)
 	r.GET("/home", routes.GetHomeList)
-	r.GET("/login", routes.Login)
-	miniAuth := r.Group("/mini")
+	r.GET("/login_wx", routes.Login)
+	miniAuth := r.Group("/wx")
 	miniAuth.Use(db.AuthRequired)
 	{
-		miniAuth.GET("/alive", routes.ALive)
+		miniAuth.GET("/user_info", routes.UserInfo)
 	}
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
