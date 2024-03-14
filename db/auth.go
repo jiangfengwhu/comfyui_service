@@ -13,7 +13,7 @@ func AuthRequired(c *gin.Context) {
 	var user User
 	err := db.user.FindOne(context.TODO(), bson.M{"openid": token}).Decode(&user)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, model.Response{Code: 403, Msg: "未登录"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, model.Response{Code: 401, Msg: "未登录"})
 		return
 	}
 	c.Set("user", user)
