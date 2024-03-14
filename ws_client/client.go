@@ -54,7 +54,7 @@ func InitWs() {
 			}
 			if msg.Type == "execution_error" {
 				filter := bson.M{"job_id": msg.Data.PromptId}
-				updater := bson.M{"$set": bson.M{"status": -1}}
+				updater := bson.M{"$set": bson.M{"status": -1, "err_msg": msg.Data.ExceptionMessage}}
 				_, err := db.UpdateImageOne(filter, updater)
 				if err != nil {
 					log.Println("update err:", err.Error())
