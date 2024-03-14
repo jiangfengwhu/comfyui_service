@@ -27,12 +27,12 @@ type ImageUploadReq struct {
 }
 
 func queuePrompt(data utils.Prompt) (string, error) {
-	jsonData, err := json.Marshal(map[string]interface{}{"prompt": data})
+	jsonData, err := json.Marshal(map[string]interface{}{"prompt": data, "client_id": utils.ComfyClientId})
 	if err != nil {
 		log.Println("marshal err:", err)
 		return "", err
 	}
-	url := fmt.Sprintf("%s/prompt", utils.Config.ComfyHost)
+	url := fmt.Sprintf("http://%s/prompt", utils.Config.ComfyHost)
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Println("post err:", err)
@@ -168,7 +168,10 @@ func MiniQueuePrompt(c *gin.Context) {
 		Public:     false,
 		Status:     0,
 	}
-	galleryFilter := bson.M{"_id": outputPrefix}
-	_, err = db.UpdateImageOne(galleryFilter, galleryItem)
-	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: err.Error(), Data: galleryItem})
+	err = db.AddImage(galleryItem)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, model.Response{Code: -1, Msg: err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: galleryItem})
 }

@@ -4,6 +4,7 @@ import (
 	"comfyui_service/db"
 	"comfyui_service/routes"
 	"comfyui_service/utils"
+	"comfyui_service/ws_client"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +14,7 @@ func main() {
 	utils.UpdateTemplatePool()
 	db.Init()
 	defer db.CloseDB()
+	ws_client.InitWs()
 
 	r := gin.Default()
 	r.GET("/prompt", routes.GetPrompt)

@@ -26,8 +26,10 @@ func (config *ServerConfig) String() string {
 }
 
 var Config ServerConfig
+var ComfyClientId string
 
 func InitConfig() {
+	ComfyClientId = GetUUID()
 	fileData, err := os.ReadFile("./config.json")
 	if err != nil {
 		fmt.Println("Error reading JSON file:", err)

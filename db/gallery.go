@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,12 +19,9 @@ type ImageBase struct {
 	ErrMsg     string             `bson:"err_msg" json:"err_msg"`
 }
 
-func AddImage(image ImageBase) (primitive.ObjectID, error) {
-	result, err := db.gallery.InsertOne(context.TODO(), bson.D{{"owner", image.Owner}, {"width", image.Width}, {"height", image.Height}, {"job_id", image.JobId}, {"public", image.Public}, {"status", image.Status}})
-	if err != nil {
-		return primitive.NilObjectID, err
-	}
-	return result.InsertedID.(primitive.ObjectID), nil
+func AddImage(image ImageBase) error {
+	_, err := db.gallery.InsertOne(context.TODO(), image)
+	return err
 }
 
 func UpdateImageOne(filter interface{}, data interface{}) (*mongo.UpdateResult, error) {
