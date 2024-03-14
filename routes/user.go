@@ -8,11 +8,20 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"path/filepath"
 )
+
+type UploadReq struct {
+	Type string                `form:"type" binding:"required"`
+	Name string                `form:"name" binding:"required"`
+	File *multipart.FileHeader `form:"file" binding:"required"`
+}
 
 func getWxUser(code string) (db.WxLoginSession, error) {
 	url := fmt.Sprintf("https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code", utils.Config.APPID, utils.Config.APPSecret, code)
@@ -64,4 +73,33 @@ func Login(c *gin.Context) {
 func UserInfo(c *gin.Context) {
 	user, _ := c.Get("user")
 	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: user})
+}
+
+func MyGallery(c *gin.Context) {
+	user := c.MustGet("user").(db.User)
+	filter := bson.M{"owner": user.Id}
+	data, err := db.FindImage(filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: data})
+}
+
+func UploadFile(c *gin.Context) {
+	var uploadReq UploadReq
+	if err := c.ShouldBind(&uploadReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	path := filepath.Join(utils.Config.UploadDir, uploadReq.Name)
+	if utils.CheckFileExists(path) {
+		c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "文件已存在", Data: uploadReq.Name})
+		return
+	}
+	if err := c.SaveUploadedFile(uploadReq.File, path); err != nil {
+		c.JSON(http.StatusBadRequest, model.Response{Code: -1, Msg: err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: uploadReq.Name})
 }

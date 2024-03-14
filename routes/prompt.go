@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io"
 	"log"
 	"net/http"
@@ -137,13 +138,13 @@ func MiniQueuePrompt(c *gin.Context) {
 	var promptTemplate = utils.ReadPromptTemplate(req.TemplateId)
 	workflowId := promptTemplate.Type
 	var prompt = utils.ReadWorkflowFile(workflowId)
-	outputPrefix := utils.GetUUID()
+	outputPrefix := primitive.NewObjectID()
 	prompt.Process(func(key string, val utils.BaseNode) {
 		val.UpdatePrompt(promptTemplate.PromptGroup)
 		val.UpdateSampler(promptTemplate.Sampler)
 		val.UpdateModel(promptTemplate.CheckPoint)
 		val.UpdateOutputImage(promptTemplate.OutputImage)
-		val.UpdateImagePrefix(outputPrefix, "", "jpg")
+		val.UpdateImagePrefix(outputPrefix.Hex(), user.Id.Hex(), "jpg")
 		if img, ok := req.Images[key]; ok {
 			val.UpdateInputImage(img)
 		}
@@ -155,7 +156,19 @@ func MiniQueuePrompt(c *gin.Context) {
 		return
 	}
 	filter := bson.M{"_id": user.Id}
-	updater := bson.M{"$set": bson.M{"tickets": user.Tickets - 1}, "$push": bson.M{"history": outputPrefix}}
-	db.UpdateUserOne(filter, updater)
-	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: map[string]string{"prompt_id": promptId, "output_prefix": outputPrefix}})
+	updater := bson.M{"$set": bson.M{"tickets": user.Tickets - 1}}
+	_, err = db.UpdateUserOne(filter, updater)
+	galleryItem := db.ImageBase{
+		Id:         outputPrefix,
+		Owner:      user.Id,
+		TemplateId: req.TemplateId,
+		Width:      promptTemplate.OutputImage.Width,
+		Height:     promptTemplate.OutputImage.Height,
+		JobId:      promptId,
+		Public:     false,
+		Status:     0,
+	}
+	galleryFilter := bson.M{"_id": outputPrefix}
+	_, err = db.UpdateImageOne(galleryFilter, galleryItem)
+	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: err.Error(), Data: galleryItem})
 }

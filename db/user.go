@@ -27,7 +27,6 @@ type User struct {
 	Avatar   string             `bson:"avatar" json:"avatar"`
 	Id       primitive.ObjectID `bson:"_id" json:"id"`
 	Tickets  int                `bson:"tickets" json:"tickets"`
-	History  []string           `bson:"history" json:"history"`
 }
 
 func FindUser(user WxLoginSession) (User, error) {

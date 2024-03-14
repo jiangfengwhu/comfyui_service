@@ -18,6 +18,7 @@ type ServerConfig struct {
 	MongoUrl         string `json:"mongo_url"`
 	APPID            string `json:"appid"`
 	APPSecret        string `json:"app_secret"`
+	UploadDir        string `json:"upload_dir"`
 }
 
 func (config *ServerConfig) String() string {

@@ -28,6 +28,8 @@ func main() {
 	{
 		miniAuth.POST("/queue_prompt", routes.MiniQueuePrompt)
 		miniAuth.GET("/user_info", routes.UserInfo)
+		miniAuth.POST("/upload", routes.UploadFile)
+		miniAuth.GET("/my_gallery", routes.MyGallery)
 	}
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
