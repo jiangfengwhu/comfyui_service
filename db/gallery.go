@@ -16,6 +16,8 @@ type ImageBase struct {
 	Status     int                `bson:"status" json:"status"`
 	TemplateId string             `bson:"template_id" json:"template_id"`
 	ErrMsg     string             `bson:"err_msg" json:"err_msg"`
+	Current    int                `bson:"current" json:"current"`
+	Total      int                `bson:"total" json:"total"`
 }
 
 func AddImage(image ImageBase) error {

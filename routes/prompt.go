@@ -155,9 +155,6 @@ func MiniQueuePrompt(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, model.Response{Code: -1, Msg: "加入队列失败" + err.Error()})
 		return
 	}
-	filter := bson.M{"_id": user.Id}
-	updater := bson.M{"$set": bson.M{"tickets": user.Tickets - 1}}
-	_, err = db.UpdateUserOne(filter, updater)
 	galleryItem := db.ImageBase{
 		Id:         outputPrefix,
 		Owner:      user.Id,
@@ -173,5 +170,8 @@ func MiniQueuePrompt(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, model.Response{Code: -1, Msg: err.Error()})
 		return
 	}
+	filter := bson.M{"_id": user.Id}
+	updater := bson.M{"$set": bson.M{"tickets": user.Tickets - 1}}
+	_, err = db.UpdateUserOne(filter, updater)
 	c.JSON(http.StatusOK, model.Response{Code: 0, Msg: "success", Data: galleryItem})
 }
