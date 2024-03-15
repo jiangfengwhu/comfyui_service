@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type ImageBase struct {
@@ -29,9 +30,9 @@ func UpdateImageOne(filter interface{}, data interface{}) (*mongo.UpdateResult, 
 	return db.gallery.UpdateOne(context.TODO(), filter, data)
 }
 
-func FindImage(filter interface{}) ([]ImageBase, error) {
+func FindImage(filter interface{}, opts ...*options.FindOptions) ([]ImageBase, error) {
 	var images []ImageBase
-	cursor, err := db.gallery.Find(context.TODO(), filter)
+	cursor, err := db.gallery.Find(context.TODO(), filter, opts...)
 	err = cursor.All(context.Background(), &images)
 	return images, err
 }

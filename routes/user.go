@@ -10,6 +10,7 @@ import (
 	"github.com/goccy/go-json"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"io"
 	"log"
 	"mime/multipart"
@@ -78,7 +79,9 @@ func UserInfo(c *gin.Context) {
 func MyGallery(c *gin.Context) {
 	user := c.MustGet("user").(db.User)
 	filter := bson.M{"owner": user.Id}
-	data, err := db.FindImage(filter)
+	findOptions := options.Find()
+	findOptions.SetSort(bson.D{{"_id", -1}})
+	data, err := db.FindImage(filter, findOptions)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
