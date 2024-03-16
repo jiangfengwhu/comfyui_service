@@ -36,3 +36,7 @@ func FindImage(filter interface{}, opts ...*options.FindOptions) ([]ImageBase, e
 	err = cursor.All(context.Background(), &images)
 	return images, err
 }
+
+func DeleteImage(filter interface{}) (*mongo.DeleteResult, error) {
+	return db.gallery.DeleteOne(context.TODO(), filter)
+}
